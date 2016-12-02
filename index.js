@@ -4,14 +4,14 @@ var _ = require('lodash')
 var map = tag => object => func =>{
   object = _.cloneDeep(object)
 
-  var _map = c=>{
-    c = func(c)
+  var _map = p=>c=>{
+    c = func(c,p)
     if(c[tag]) _recursive(c)
     return c
   }
 
   var _recursive = obj=>{
-    obj[tag] = obj[tag].map(_map)
+    obj[tag] = obj[tag].map(_map(obj))
     return obj
   }
 
@@ -20,8 +20,8 @@ var map = tag => object => func =>{
 
 // forEach :: Tag:String => Object => Function => Undefined
 var forEach = tag =>object =>func=>{
-  var _each = c=>{func(c);if(c[tag]) _recursive(c);}
-  var _recursive = obj=>obj[tag].forEach(_each)
+  var _each = p=>c=>{func(c,p);if(c[tag]) _recursive(c);}
+  var _recursive = obj=>obj[tag].forEach(_each(obj))
   _recursive(object)
 }
 

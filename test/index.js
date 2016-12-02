@@ -2,6 +2,7 @@ var tree = require('..')
 var Should = require('chai').Should()
 
 var object = {
+  name:'main',
   children:[
     {
       name:'one',
@@ -28,6 +29,12 @@ var object = {
   ]
 }
 
+const parentsExpected = [
+  'main','one','one','main','main','three','three','threeTwo',
+  'threeTwo','main',
+]
+
+
 describe('forEach :: tag:String => Object => Function => undefined',()=>{
   it('should call func in all children',()=>{
     var expected = ['one','oneOne','oneTwo','two','three','threeOne',
@@ -37,6 +44,12 @@ describe('forEach :: tag:String => Object => Function => undefined',()=>{
     tree.forEach('children')(object)(testFunc)
 
     test.should.be.deep.equal(expected)
+  })
+
+  it('should return good parent to callback',()=>{
+    let i = 0
+    const testFunc = (el, p)=>p.name.should.be.equal(parentsExpected[i++])
+    tree.forEach('children')(object)(testFunc)
   })
 })
 
@@ -73,5 +86,14 @@ describe('map :: tag:String => Object => Function => Object',()=>{
 
     var testFunc = child => child.name.should.be.equal('ok')
     tree.forEach('children')(obj)(testFunc)
+  })
+
+  it('should return good parent to callback',()=>{
+    let i = 0
+    const testFunc = (el, p)=>{
+      p.name.should.be.equal(parentsExpected[i++])
+      return el
+    }
+    tree.map('children')(object)(testFunc)
   })
 })
