@@ -42,21 +42,25 @@ var filter = tag => object => func => {
   return reduce(tag)(object)(test)([])
 }
 
-// query :: name:String => Object => Array
-var query = object=>name=>{
+// query :: tree:Object => name:String =>  => Array
+var query = tree=>name=>{
   var query = name.trim().replace(/ +/,' ').split(' ')
   return query.reduce((children, name)=>{
     var regExp = new RegExp('\\b'+name+'\\b')
     var test = child=>child.name?child.name.match(regExp):false
     children = children.filter(child=>'children' in child)
     return _.uniq(filter('children')({children})(test))
-  },object.children)
+  },tree.children)
 }
+
+// queryOne :: tree:Object => name:String => Array
+var queryOne = tree=>name=>query(tree)(name)[0]
 
 module.exports = {
   map,
   forEach,
   reduce,
   filter,
-  query
+  query,
+  queryOne,
 }
