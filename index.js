@@ -55,7 +55,7 @@ var queryKey = key=>tree=>name=>{
     var test = child=>child.name?child.name.match(regExp):false
     children = children.filter(child=>key in child)
     return _.uniq(filter(key)({children})(test))
-  },tree.children)
+  },tree[key])
 }
 
 module.exports = {
