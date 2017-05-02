@@ -43,18 +43,20 @@ var filter = tag => object => func => {
 }
 
 // query :: tree:Object => name:String =>  => Array
-var query = tree=>name=>{
+var query = tree=>name=>queryKey('children')
+
+// queryOne :: tree:Object => name:String => Array
+var queryOne = tree=>name=>query(tree)(name)[0]
+
+var queryKey = key=>tree=>name=>{
   var query = name.trim().replace(/ +/,' ').split(' ')
   return query.reduce((children, name)=>{
     var regExp = new RegExp('\\b'+name+'\\b')
     var test = child=>child.name?child.name.match(regExp):false
-    children = children.filter(child=>'children' in child)
-    return _.uniq(filter('children')({children})(test))
+    children = children.filter(child=>key in child)
+    return _.uniq(filter(key)({children})(test))
   },tree.children)
 }
-
-// queryOne :: tree:Object => name:String => Array
-var queryOne = tree=>name=>query(tree)(name)[0]
 
 module.exports = {
   map,
@@ -63,4 +65,5 @@ module.exports = {
   filter,
   query,
   queryOne,
+  queryKey,
 }
