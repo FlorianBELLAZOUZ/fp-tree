@@ -43,7 +43,7 @@ var filter = tag => object => func => {
 }
 
 // query :: tree:Object => name:String =>  => Array
-var query = tree=>name=>queryKey('children')
+var query = tree=>name=>queryKey('children')(tree)(name)
 
 // queryOne :: tree:Object => name:String => Array
 var queryOne = tree=>name=>query(tree)(name)[0]
