@@ -54,7 +54,7 @@ var queryKey = key=>tree=>name=>{
     var regExp = new RegExp('\\b'+name+'\\b')
     var test = child=>child.name?child.name.match(regExp):false
     children = children.filter(child=>key in child)
-    return _.uniq(filter(key)({children})(test))
+    return _.uniq(filter(key)({[key]:children})(test))
   },tree[key])
 }
 
